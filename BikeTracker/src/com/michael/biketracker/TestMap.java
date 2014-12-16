@@ -24,7 +24,7 @@ public class TestMap extends Activity implements LocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(isGooglePlay()){  //check if google play services is available..if it is set up the map
-        	 setContentView(R.layout.testmap);
+        	 setContentView(R.layout.testmap_small);
         	 setUpMap();
         }
        

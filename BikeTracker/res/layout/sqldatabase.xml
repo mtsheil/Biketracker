@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#C0C0C0" >
+    
+    <TextView
+        android:id="@+id/textView8"  android:layout_width="wrap_content"  android:layout_height="wrap_content" android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"  android:text="History" android:layout_gravity="center" > </TextView>
+    
+ 
+
+
+    <TextView
+        android:id="@+id/textView1"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Distance" > </TextView>
+    <EditText android:id="@+id/etSqlDistance" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#FFFFFF"></EditText>
+    
+    <TextView
+        android:id="@+id/textView2"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Time" > </TextView>
+    <EditText android:id="@+id/etSqlTime" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#FFFFFF"></EditText>
+        
+    <TextView
+        android:id="@+id/textView3"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Max Speed" > </TextView>
+    <EditText android:id="@+id/etSqlMaxSpeed" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#FFFFFF"></EditText>
+
+    <TextView
+        android:id="@+id/textView4"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Average Speed" > </TextView>
+    <EditText android:id="@+id/etSqlAvSpeed" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#FFFFFF"></EditText>
+    
+    <TextView
+        android:id="@+id/textView5"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Meters Climbed" > </TextView>
+    <EditText android:id="@+id/etSqlMtrsClimbed" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#FFFFFF"></EditText>
+    
+    <TextView
+        android:id="@+id/textView6"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Calories" > </TextView>
+    <EditText android:id="@+id/etSqlCalories" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="#FFFFFF"></EditText>
+
+    <Button
+        android:id="@+id/butnSqlUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update" />
+
+    <Button
+        android:id="@+id/butnSqlopen2view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View" />
+
+</LinearLayout>

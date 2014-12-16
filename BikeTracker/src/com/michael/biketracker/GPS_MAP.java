@@ -1,6 +1,9 @@
 package com.michael.biketracker;
 
 //import android.annotation.TargetApi;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import android.R.string;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -13,10 +16,21 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
+import android.location.Criteria;
 
 
 //@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-public class GPS extends Activity implements LocationListener {
+public class GPS_MAP extends Activity implements LocationListener {
 	
 	
 	int counter = 0;
@@ -25,30 +39,32 @@ public class GPS extends Activity implements LocationListener {
 	int seconds;
 	int hours;
 	double height ;
-    float lastHeight ; //= (float) height;
-    float countHeight = 0;
+  float lastHeight ;
+  float countHeight = 0;
 	float heightDiff;
 	float currentSpeed;
 	float currentSpeedKm;
 	float maxsp = 0;
 	String speed;
-	TextView notNull;//show if connected to satellite or not
+//	TextView notNull;//show if connected to satellite or not
 	TextView tvDist;
 	TextView txtvukm;
 	TextView tvMaxSp;
-	TextView tvAlt;
+//	TextView tvAlt;
 	TextView timer;
 	TextView tvAscent;
 	TextView tvAvSpeed;
-	TextView latitude;
-	TextView longitude;
+//	TextView latitude;
+//	TextView longitude;
 	   float[] result;
 	   float countDist=0;
 	   float distKm =0;
-       float distance=0;
-       double lat1=0, lon1=0 ,lat2 = 0, lon2 = 0;
+     float distance=0;
+     double lat1=0, lon1=0 ,lat2 = 0, lon2 = 0;
 	   int dist=0;
 	   float avSpeed;
+	   
+	   private GoogleMap googlemap;
 	   
 	WakeLock wkLok;
 	@Override
@@ -59,7 +75,12 @@ public class GPS extends Activity implements LocationListener {
 		
 		super.onCreate(savedInstanceState);
 		wkLok.acquire();
-		setContentView(R.layout.gps);
+	
+		setContentView(R.layout.testmap_small);
+        if(isGooglePlay()){  //check if google play services is available..if it is set up the map
+       	 setUpMap();
+       }
+	
 		
 		LocationManager locMgr =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4657,1, this);//1000 Milliseconds and 1 meters distance
@@ -82,35 +103,35 @@ public class GPS extends Activity implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		
-		 notNull =(TextView) this.findViewById(R.id.notNull);// textView show if connected to satellite or not
+//       notNull =(TextView) this.findViewById(R.id.notNull);// textView show if connected to satellite or not
 		 tvDist =(TextView) this.findViewById(R.id.txtVuDistance);
 		 txtvukm =(TextView) this.findViewById(R.id.txtVuSpdKm);
 		 tvMaxSp =(TextView) this.findViewById(R.id.txtVuMaxSpeed);
-		 tvAlt =(TextView) this.findViewById(R.id.tVAltitude);
+	//	 tvAlt =(TextView) this.findViewById(R.id.tVAltitude);
 	     tvAscent = (TextView) this.findViewById(R.id.tvAscent);
 	     timer = (TextView) this.findViewById(R.id.tvTimer);
 	     tvAvSpeed = (TextView) this.findViewById(R.id.tvAvr);
-	     latitude = (TextView) this.findViewById(R.id.currentLat);
-	 	 longitude = (TextView)this.findViewById(R.id.currentLon);
+	//     latitude = (TextView) this.findViewById(R.id.currentLat);
+	// 	 longitude = (TextView)this.findViewById(R.id.currentLon);
 	
-     
+   
 	     
 		if(location==null)
 		{   //display null values initially
-			notNull.setText("Getting Satelite Fix");
+		//	notNull.setText("Getting Satellite Fix");
 			txtvukm.setText("_._ Km/h");
-			tvDist.setText("_._ meters");
-			timer.setText("_._._sec");
+			tvDist.setText("_._ m");
+			timer.setText("_._._");
 			tvAvSpeed.setText("_._ Km/h");
 			tvMaxSp.setText("_._ Km/h");
-			tvAlt.setText("_ meters");
-			tvAscent.setText("_ meters");
-			latitude.setText("_ ");
-			longitude.setText("_ ");
+	//		tvAlt.setText("_ meters");
+			tvAscent.setText("_ m");
+	//		latitude.setText("_ ");
+	//		longitude.setText("_ ");
 			
 		}
 		else if(location != null) 
-		{   notNull.setText("running");
+		{ //  notNull.setText("running");
 			//display current values as device moves and round to 1 place of decimals
 			
 	    	 currentSpeed = location.getSpeed();
@@ -123,14 +144,14 @@ public class GPS extends Activity implements LocationListener {
 	         showMaxSp(); //maximum speed
 	         
 	         height = location.getAltitude();
-		     showHeight();// current altitude
+//		     showHeight();// current altitude
 	         
 	         addHeight();//meters climbed
 	         
 	         //Display current location   
-	         latitude.setText("Current Latitude : " + String.valueOf(location.getLatitude())); 
-	         longitude.setText("Current Longitude: " + String.valueOf(location.getLongitude()));
-     
+	//        latitude.setText("Current Latitude : " + String.valueOf(location.getLatitude())); 
+	 //        longitude.setText("Current Longitude: " + String.valueOf(location.getLongitude()));
+   
 
 	        lat1 = location.getLatitude(); //distance
 	        lon1 = location.getLongitude();
@@ -145,26 +166,68 @@ public class GPS extends Activity implements LocationListener {
 		}
 	
 	}
+    private void setUpMap(){
+    	if (googlemap == null){
+    		googlemap = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
+    		if(googlemap != null){
+    			googlemap.setMyLocationEnabled(true);
+    			LocationManager locMan = (LocationManager) getSystemService(LOCATION_SERVICE);//get current location through Location Service
+    			String provider = locMan.getBestProvider(new Criteria(), true);
+    			if(provider == null){
+    				onProviderDisabled(provider);
+    			}
+    			Location loc = locMan.getLastKnownLocation(provider);//even if system provider is null get last known location
+    			if (loc != null){
+    				onLocationChanged(loc);//call the on location changed method
+    			}
+    			//onclick listener for google map
+    			googlemap.setOnMapLongClickListener(onLongMapClick());
+    		}
+    	}
+    }
+    private boolean isGooglePlay(){
+    	int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+    	if (status == ConnectionResult.SUCCESS)
+    	{
+    		return(true);
+    	}                         //if googleplay not available toast message that not available
+    	else
+    	{
+    		Toast.makeText(this, "google play not available", Toast.LENGTH_LONG).show();
+    	}
+    	return(false);
+    }
+	private OnMapLongClickListener onLongMapClick() {
+		//method called when long click on map 
+		return new OnMapLongClickListener(){
 
+			@Override
+			public void onMapLongClick(LatLng arg0) {
+				// TODO Auto-generated method stub
+			//	Log.i(arg0.toString(),"long click made");
+			}
+			
+		};
+	}
 
 	private void getDistance() {  //method to calculate distance
 		if(lat2 != 0 & lon2!=0) // if second latitude and longitude is not zero. ie location has changed to 2nd location
-     	{float[] results =new float[1];
-     	Location.distanceBetween(lat1, lon1, lat2, lon2, results);
-     	 distance = results[0];
-     	 countDist =  distance + countDist;
-         dist = (int) countDist;  //cast distance to integer to ignore decimals 
-         if(dist<1000)  // if distance is less than  1km then display as meters
-              { tvDist.setText(dist + "meters");//Display whole number of meters
-              }
-         else if (dist > 999)            //when distance is greater than 1000 meters
-        	  { distKm =countDist/1000;  // then display as kilometres
-             String ds = String.format("%.1f", distKm);// Display  km to 1 place of decimals
-        	  tvDist.setText(ds + "Km");
-        	  }
-         }
-        lat2 = lat1;//make second location first location
-        lon2 = lon1; 
+   	{float[] results =new float[1];
+   	Location.distanceBetween(lat1, lon1, lat2, lon2, results);
+   	 distance = results[0];
+   	 countDist =  distance + countDist;
+       dist = (int) countDist;  //cast distance to integer to ignore decimals 
+       if(dist<1000)  // if distance is less than  1km then display as meters
+            { tvDist.setText(dist + "m");//Display whole number of meters
+            }
+       else if (dist > 999)            //when distance is greater than 1000 meters
+      	  { distKm =countDist/1000;  // then display as kilometres
+           String ds = String.format("%.1f", distKm);// Display  km to 1 place of decimals
+      	  tvDist.setText(ds + "Km");
+      	  }
+       }
+      lat2 = lat1;//make second location first location
+      lon2 = lon1; 
 		
 	}
 
@@ -172,17 +235,17 @@ public class GPS extends Activity implements LocationListener {
 		
 		timeCount +=5;                      // counter to get elapsed time. Only increments when location has changed.
 		if (timeCount <60)                 // handling display of elapsed time when less than one minute
-		{timer.setText(timeCount + "Seconds");}      //display seconds
+		{timer.setText(timeCount + "s");}      //display seconds
 		else if (timeCount > 59 && timeCount < 3600) // handling display of time when less one hour and more than one minute
 		{ mins = timeCount/60;                       //calculate minutes
 		seconds = timeCount%60;                      //calculate seconds
-		timer.setText(mins +":" + seconds + "Minutes");}   //display  minutes:seconds    
+		timer.setText(mins +":" + seconds + "");}   //display  minutes:seconds    
 		else if(timeCount > 3559)                               //handling display of time when more than one hour
 		{hours = timeCount/3600;                                   //calculate hours
 		mins = (
 				timeCount%3600)/60;                                 //calculate minutes
 		seconds = timeCount%60;                                      //calculate seconds
-		timer.setText( hours + ":" + mins + ":"+ seconds + "Hours");   //display  hours:minutes:seconds
+		timer.setText( hours + ":" + mins + ":"+ seconds + "");   //display  hours:minutes:seconds
 		}
 	}
 
@@ -197,14 +260,14 @@ public class GPS extends Activity implements LocationListener {
 
 
 
-	public void showHeight() {   //method to display current height
+/*	public void showHeight() {   //method to display current height
 		tvAlt.setText(height + " m");
-	}
+	}*/
 
 	private void showMaxSp() {//method to get maximum speed. current speed is set to max speed if it is greater than current max speed
 		if(currentSpeedKm > maxsp)
 		{maxsp = currentSpeedKm;}
-    	String mx = String.format( "%.1f", maxsp);
+  	String mx = String.format( "%.1f", maxsp);
 		tvMaxSp.setText(mx + " Km/h");
 	
 	}
@@ -212,7 +275,7 @@ public class GPS extends Activity implements LocationListener {
 	public void showSpeedKm() {
 		// method to show current speed
 		 currentSpeedKm = (float) (currentSpeed*3.6); //multiply by 3600 to convert to hours and divide by 1000 to get kilometers
-		   //show speed in kilometers per hour to one place of decimals
+		   //show speed in kilometres per hour to one place of decimals
 		 speed = String.format("%.1f", currentSpeedKm);//from http://stackoverflow.com/questions/11072340/i-need-to-round-a-float-to-two-decimal-places-in-java
 		txtvukm.setText(speed + " Km/h");
 		
@@ -244,3 +307,4 @@ public class GPS extends Activity implements LocationListener {
 	}
 
 }
+

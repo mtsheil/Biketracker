@@ -1,0 +1,74 @@
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".ProfileStart" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/riderWeight"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/textviewDisplay"/>
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:id="@+id/addButton"
+        />
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/sub"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:id="@+id/subtractButton"
+        />
+          <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bikeWeight"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/textviewBikeWt"/>
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:id="@+id/addBikeWtButton"
+        />
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/sub"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:id="@+id/subtractBikeWtButton"
+        />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Weight Is 80 Kg"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingBottom="50dp"
+        android:id="@+id/textviewTotal"/>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_gravity="center" 
+        />
+      
+</LinearLayout>

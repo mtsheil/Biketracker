@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+            <TextView
+                android:id="@+id/textView3" android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="History" />
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TableRow>
+
+   <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
+        android:text="Dist"  android:textAppearance="?android:attr/textAppearanceSmall" />
+   <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
+        android:text="Av_Spd"  android:textAppearance="?android:attr/textAppearanceSmall" />
+   <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
+        android:text="Max_Spd"  android:textAppearance="?android:attr/textAppearanceSmall" />
+   <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
+        android:text="Climb"  android:textAppearance="?android:attr/textAppearanceSmall" />
+   <TextView  android:layout_width="fill_parent"   android:layout_height="fill_parent"  android:layout_weight="1"
+        android:text="Cals"  android:textAppearance="?android:attr/textAppearanceSmall" />
+   <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
+       android:text="Time"  android:textAppearance="?android:attr/textAppearanceSmall"  />
+ 
+        </TableRow>
+  </TableLayout>
+
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="get info from db" />
+
+         
+
+ </LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bike Tracker</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="riderWeight">Your Weight Is 70 Kg</string>
+    <string name="add">Add One</string>
+    <string name="sub">Subtract One</string>
+    <string name="bikeWeight">Bike Weight Is 10 Kg</string>
+    <string name="dist">0 km</string>
+    <string name="initial_speed_km">0.0 Km/h</string>
+    <string name="max_speed_km">0.0 Km/h</string>
+    <string name="altNull">0 m</string>
+    <string name="distance">Distance</string>
+    <string name="distanceNull">0 km</string>
+    <string name="speed">Speed</string>
+    <string name="satellite_status">Acquiring Satellites</string>
+    <string name="elapsedTime">Time</string>
+    <string name="speedNull">0.0 km</string>
+    <string name="avSpeed">Av Speed</string>
+    <string name="timeNull">0:0:0</string>
+    <string name="maxSpeed">Max Speed</string>
+    <string name="altitude">Altitude</string>
+    <string name="totAscent">Ascent</string>
+</resources>

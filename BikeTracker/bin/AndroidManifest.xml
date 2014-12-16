@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.michael.biketracker"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="21" />
+    
+    <permission  android:name="com.michael.biketracker.permission.MAPS_RECEIVE"
+                 android:protectionLevel="signature"/>
+    <uses-permission  android:name="com.michael.biketracker.permission.MAPS_RECEIVE"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-feature 
+        android:glEsVersion="0x00020000"
+        android:required="true"
+          />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        
+            <meta-data 
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyA-cxWmLV9Iw-n4MPcDhVrgOQZodUwMc6U "  /> 
+             <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        
+        <activity
+            android:name="com.michael.biketracker.Splash"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.michael.biketracker.Menu"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.MENU" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.michael.biketracker.ProfileStart"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.PROFILESTART" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.michael.biketracker.TestMap"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.TestMap" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity> 
+        <activity
+            android:name="com.michael.biketracker.GPS_MAP"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.GPS_MAP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>               
+        
+        <activity
+            android:name="com.michael.biketracker.Welcome"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.Welcome" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.michael.biketracker.SecondActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.SecondActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+
+        
+        <activity
+            android:name="com.michael.biketracker.Register"
+            android:label="@string/app_name" >
+                <intent-filter>
+                <action android:name="com.michael.biketracker.Register" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.michael.biketracker.DialogActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+         <activity
+            android:name="com.michael.biketracker.DialogActivity2"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <activity
+            android:name="com.michael.biketracker.LogIn"
+            android:label="@string/app_name" >
+             <intent-filter>
+                <action android:name="com.michael.biketracker.LogIn" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        
+        <activity
+            android:name="com.michael.biketracker.GPS"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.GPS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.michael.biketracker.Map"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.Map" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>  
+        <activity
+            android:name="com.michael.biketracker.MapFragmentClass"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.michael.biketracker.MapFragmentClass" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>               
+   
+          
+
+    </application>
+
+</manifest>
