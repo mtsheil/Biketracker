@@ -13,7 +13,8 @@
         android:layout_height="fill_parent" >
 
         <TableRow>
-
+   <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
+       android:text="No."  android:textAppearance="?android:attr/textAppearanceSmall"  />
    <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
         android:text="Dist"  android:textAppearance="?android:attr/textAppearanceSmall" />
    <TextView  android:layout_width="fill_parent"  android:layout_height="fill_parent"  android:layout_weight="1"
