@@ -59,30 +59,12 @@
     android:text="@string/initial_speed_km" />
 
 <Button
-    android:id="@+id/button1"
+    android:id="@+id/btnStart"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_alignParentLeft="true"
     android:text="Start" />
-
-<Button
-    android:id="@+id/button2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignBaseline="@+id/button1"
-    android:layout_alignBottom="@+id/button1"
-    android:layout_centerHorizontal="true"
-    android:text="Pause" />
-
-<Button
-    android:id="@+id/button3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignBaseline="@+id/button2"
-    android:layout_alignBottom="@+id/button2"
-    android:layout_alignRight="@+id/textView6"
-    android:text="Stop" />
 
 <TextView
     android:id="@+id/tvAscent"
@@ -147,6 +129,24 @@
     android:layout_below="@+id/textView4"
     android:text="@string/initial_speed_km"
     android:textSize="20dp" />
+
+<Button
+    android:id="@+id/btnPause"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignBaseline="@+id/btnStart"
+    android:layout_alignBottom="@+id/btnStart"
+    android:layout_centerHorizontal="true"
+    android:text="Pause" />
+
+<Button
+    android:id="@+id/btnStop"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignBaseline="@+id/btnPause"
+    android:layout_alignBottom="@+id/btnPause"
+    android:layout_alignRight="@+id/tvTimer"
+    android:text="Stop" />
       
 </RelativeLayout>          
     

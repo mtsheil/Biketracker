@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#C0C0C0" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="#C0C0C0" >
     
-    <TextView
-        android:id="@+id/textView8"  android:layout_width="wrap_content"  android:layout_height="wrap_content" android:paddingBottom="10dp"
+    <TextView  android:id="@+id/textView8"  android:layout_width="wrap_content"  android:layout_height="wrap_content" android:paddingBottom="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"  android:text="History" android:layout_gravity="center" > </TextView>
     
- 
-
-
-    <TextView
-        android:id="@+id/textView1"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Distance" > </TextView>
-    <EditText android:id="@+id/etSqlDistance" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="#FFFFFF"></EditText>
-    
-    <TextView
-        android:id="@+id/textView2"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Time" > </TextView>
-    <EditText android:id="@+id/etSqlTime" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="#FFFFFF"></EditText>
+  <LinearLayout android:weightSum="100" android:layout_width="fill_parent" android:layout_height="wrap_content"  android:orientation="horizontal" >
+     <EditText android:id="@+id/etSqlDistance" android:hint="Distance" android:layout_width="match_parent" android:layout_height="wrap_content"
+           android:layout_weight="50"   android:background="#FFFFFF"></EditText>
+     <EditText android:id="@+id/etSqlTime" android:hint="Time"  android:layout_width="match_parent" android:layout_height="wrap_content"
+           android:layout_weight="50"  android:background="#FFFFFF"></EditText> 
+  </LinearLayout>
         
-    <TextView
-        android:id="@+id/textView3"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Max Speed" > </TextView>
-    <EditText android:id="@+id/etSqlMaxSpeed" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="#FFFFFF"></EditText>
+  <LinearLayout android:weightSum="100" android:layout_width="fill_parent" android:layout_height="wrap_content"  android:orientation="horizontal" >    
+      <EditText android:id="@+id/etSqlAvSpeed" android:layout_width="match_parent" android:hint="Av_Speed"  android:layout_height="wrap_content"
+            android:layout_weight="50"  android:background="#FFFFFF"></EditText> 
+      <EditText android:id="@+id/etSqlMaxSpeed" android:layout_width="match_parent" android:hint="Max_Speed"  android:layout_height="wrap_content"
+            android:layout_weight="50" android:background="#FFFFFF"></EditText> 
+  </LinearLayout>
+        
+  <LinearLayout android:weightSum="100" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" >        
+      <EditText android:id="@+id/etSqlMtrsClimbed"    android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Meters_climb" 
+            android:layout_weight="50" android:background="#FFFFFF"></EditText>    
+      <EditText android:id="@+id/etSqlCalories"    android:layout_weight="50" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Calories" 
+            android:background="#FFFFFF"> </EditText>
+   </LinearLayout>  
 
-    <TextView
-        android:id="@+id/textView4"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Average Speed" > </TextView>
-    <EditText android:id="@+id/etSqlAvSpeed" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="#FFFFFF"></EditText>
     
-    <TextView
-        android:id="@+id/textView5"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Meters Climbed" > </TextView>
-    <EditText android:id="@+id/etSqlMtrsClimbed" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="#FFFFFF"></EditText>
-    
-    <TextView
-        android:id="@+id/textView6"  android:layout_width="wrap_content"  android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"  android:text="Calories" > </TextView>
-    <EditText android:id="@+id/etSqlCalories" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="#FFFFFF"></EditText>
+  <LinearLayout android:weightSum="100"  android:layout_width="fill_parent" android:layout_height="wrap_content"  android:orientation="horizontal" >
+       <Button  android:id="@+id/butnSqlopen2view" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_weight="50"  android:text="View" />
+       <Button android:id="@+id/butnSqlUpdate" android:layout_width="wrap_content"  android:layout_height="wrap_content"
+            android:layout_weight="50" android:text="Update" />
+   </LinearLayout>
 
-    <Button
-        android:id="@+id/butnSqlUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Update" />
+   <LinearLayout android:weightSum="100"  android:layout_width="fill_parent" android:layout_height="wrap_content"  android:orientation="horizontal" >
+        <TextView android:id="@+id/textView1"  android:layout_width="match_parent"  android:layout_height="wrap_content" android:text="Enter Row id"
+             android:layout_weight="70"  android:textAppearance="?android:attr/textAppearanceSmall" />
+        <EditText  android:id="@+id/etRowId" android:layout_width="match_parent" android:layout_height="wrap_content" android:ems="10"
+         android:layout_weight="30" android:inputType="number" android:hint="Row Id" android:background="#FFFFFF" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/butnSqlopen2view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View" />
+   <Button
+       android:id="@+id/btnsqlGetInfo"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Get Information" />
 
+   <Button
+       android:id="@+id/btnsqlMod"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Edit Entry" />
+
+   <Button
+       android:id="@+id/btnsqlDelete"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Delete" />
+  
 </LinearLayout>
+

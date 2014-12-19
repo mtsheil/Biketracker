@@ -4,7 +4,7 @@ package com.michael.biketracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-import android.R.string;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +15,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,46 +28,53 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-
 import android.location.Criteria;
+
+import android.app.Dialog;
+
 
 
 //@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-public class GPS_MAP extends Activity implements LocationListener {
+public class GPS_MAP extends Activity implements LocationListener,OnClickListener {
 	
-	
+	int distint;
 	int counter = 0;
 	int timeCount = 0;
 	int mins;
 	int seconds;
 	int hours;
 	double height ;
-  float lastHeight ;
-  float countHeight = 0;
+    float lastHeight ;
+    float countHeight = 0;
 	float heightDiff;
 	float currentSpeed;
 	float currentSpeedKm;
 	float maxsp = 0;
-	String speed;
+	String speed, calStr, mx,avs;
 //	TextView notNull;//show if connected to satellite or not
 	TextView tvDist;
 	TextView txtvukm;
 	TextView tvMaxSp;
-//	TextView tvAlt;
 	TextView timer;
 	TextView tvAscent;
 	TextView tvAvSpeed;
-//	TextView latitude;
-//	TextView longitude;
-	   float[] result;
-	   float countDist=0;
-	   float distKm =0;
-     float distance=0;
-     double lat1=0, lon1=0 ,lat2 = 0, lon2 = 0;
-	   int dist=0;
-	   float avSpeed;
-	   
-	   private GoogleMap googlemap;
+	float[] result;  //float array to store the distance
+	float countDist=0;
+	float distKm =0;
+    float distance=0;
+    double lat1=0, lon1=0 ,lat2 = 0, lon2 = 0;
+	int dist=0;
+	float avSpeed;
+	float calories = 0;
+	private GoogleMap googlemap;
+	Button bstart,bpause,bstop;
+	// String calr, heit, timr;
+    String ds,dkm;
+    String sqldist,sqltime,sqlmax;
+	  protected LocationManager locMgr;
+	 
+
+
 	   
 	WakeLock wkLok;
 	@Override
@@ -74,15 +84,18 @@ public class GPS_MAP extends Activity implements LocationListener {
 		wkLok = pwrMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "StayAwake");
 		
 		super.onCreate(savedInstanceState);
-		wkLok.acquire();
+		//wkLok.acquire();
 	
 		setContentView(R.layout.testmap_small);
         if(isGooglePlay()){  //check if google play services is available..if it is set up the map
        	 setUpMap();
        }
+	}
 	
-		
-		LocationManager locMgr =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+	public void onStart()	{
+		super.onStart();
+		wkLok.acquire();
+		locMgr =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4657,1, this);//1000 Milliseconds and 1 meters distance
 	   this.onLocationChanged(null);
 		
@@ -107,13 +120,19 @@ public class GPS_MAP extends Activity implements LocationListener {
 		 tvDist =(TextView) this.findViewById(R.id.txtVuDistance);
 		 txtvukm =(TextView) this.findViewById(R.id.txtVuSpdKm);
 		 tvMaxSp =(TextView) this.findViewById(R.id.txtVuMaxSpeed);
-	//	 tvAlt =(TextView) this.findViewById(R.id.tVAltitude);
 	     tvAscent = (TextView) this.findViewById(R.id.tvAscent);
 	     timer = (TextView) this.findViewById(R.id.tvTimer);
 	     tvAvSpeed = (TextView) this.findViewById(R.id.tvAvr);
-	//     latitude = (TextView) this.findViewById(R.id.currentLat);
-	// 	 longitude = (TextView)this.findViewById(R.id.currentLon);
+	     bstart = (Button)findViewById(R.id.btnStart);
+	     bpause = (Button)findViewById(R.id.btnPause);
+	     bstop = (Button)findViewById(R.id.btnStop);
+	     bstart.setOnClickListener(this);
+	     bpause.setOnClickListener(this);
+	     bstop.setOnClickListener(this);
 	
+
+
+
    
 	     
 		if(location==null)
@@ -124,10 +143,8 @@ public class GPS_MAP extends Activity implements LocationListener {
 			timer.setText("_._._");
 			tvAvSpeed.setText("_._ Km/h");
 			tvMaxSp.setText("_._ Km/h");
-	//		tvAlt.setText("_ meters");
 			tvAscent.setText("_ m");
-	//		latitude.setText("_ ");
-	//		longitude.setText("_ ");
+
 			
 		}
 		else if(location != null) 
@@ -139,33 +156,32 @@ public class GPS_MAP extends Activity implements LocationListener {
 		     
 		     timerCount();//elapsed time
 			 
-			 //average speed
-	        
+		        
 	         showMaxSp(); //maximum speed
 	         
 	         height = location.getAltitude();
-//		     showHeight();// current altitude
+
 	         
 	         addHeight();//meters climbed
 	         
-	         //Display current location   
-	//        latitude.setText("Current Latitude : " + String.valueOf(location.getLatitude())); 
-	 //        longitude.setText("Current Longitude: " + String.valueOf(location.getLongitude()));
-   
-
 	        lat1 = location.getLatitude(); //distance
 	        lon1 = location.getLongitude();
+	        
 	        getDistance();
 	        
-	        if (countDist >1 & timeCount>1) //divide distance by time to calculate average speed
-	        { avSpeed = (float) ((countDist/timeCount)*3.6);
-	    	String avs = String.format( "%.1f", avSpeed);
-			tvAvSpeed.setText(avs + " Km/h");}
+	        getAv();
 	        
-		
-		}
+    	}
 	
 	}
+	private String getAv(){
+        if (dist >1 & timeCount>1) //divide distance by time to calculate average speed
+        { avSpeed = (float) ((dist/timeCount)*3.6);
+    	 avs = String.format( "%.1f", avSpeed);
+		tvAvSpeed.setText(avs + " Km/h");}
+		return avs;
+	}
+	
     private void setUpMap(){
     	if (googlemap == null){
     		googlemap = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -182,6 +198,7 @@ public class GPS_MAP extends Activity implements LocationListener {
     			}
     			//onclick listener for google map
     			googlemap.setOnMapLongClickListener(onLongMapClick());
+    		
     		}
     	}
     }
@@ -210,66 +227,109 @@ public class GPS_MAP extends Activity implements LocationListener {
 		};
 	}
 
-	private void getDistance() {  //method to calculate distance
+	public int getDistance() {  //method to calculate distance
 		if(lat2 != 0 & lon2!=0) // if second latitude and longitude is not zero. ie location has changed to 2nd location
    	{float[] results =new float[1];
    	Location.distanceBetween(lat1, lon1, lat2, lon2, results);
    	 distance = results[0];
    	 countDist =  distance + countDist;
-       dist = (int) countDist;  //cast distance to integer to ignore decimals 
+       dist = (int) countDist; 
+       distKm =countDist/1000;//cast distance to integer to ignore decimals 
+   //   distint = (int) distKm;
        if(dist<1000)  // if distance is less than  1km then display as meters
             { tvDist.setText(dist + "m");//Display whole number of meters
+            
             }
        else if (dist > 999)            //when distance is greater than 1000 meters
-      	  { distKm =countDist/1000;  // then display as kilometres
-           String ds = String.format("%.1f", distKm);// Display  km to 1 place of decimals
+      	  {   // then display as kilometres
+           ds = String.format("%.1f", distKm);// Display  km to 1 place of decimals
       	  tvDist.setText(ds + "Km");
+      	  
       	  }
        }
       lat2 = lat1;//make second location first location
-      lon2 = lon1; 
+      lon2 = lon1;
+
+	return dist; 
 		
 	}
+	
+	public String sqlDistance(int dist){
+		if (dist < 1000){
+			String dist1 = String.valueOf(dist);
+			 sqldist = dist1.concat("m  .");}
+		else if(dist>999){
+			float dist2 = dist/1000;
+			dkm =String.format("%.1f", dist2);
+			sqldist = dkm.concat("km  .");
+		}
+			
+		return sqldist;
+	}
 
-	private void timerCount() {
+	private int timerCount() {
 		
-		timeCount +=5;                      // counter to get elapsed time. Only increments when location has changed.
-		if (timeCount <60)                 // handling display of elapsed time when less than one minute
+		timeCount +=5;// counter to get elapsed time. Only increments when location has changed.
+		if(timeCount<10)
+		{timer.setText("0" + timeCount + "s" );}	
+		else if (timeCount <60)                 // handling display of elapsed time when less than one minute
 		{timer.setText(timeCount + "s");}      //display seconds
 		else if (timeCount > 59 && timeCount < 3600) // handling display of time when less one hour and more than one minute
 		{ mins = timeCount/60;                       //calculate minutes
 		seconds = timeCount%60;                      //calculate seconds
 		timer.setText(mins +":" + seconds + "");}   //display  minutes:seconds    
-		else if(timeCount > 3559)                               //handling display of time when more than one hour
+		else if(timeCount > 3599)                               //handling display of time when more than one hour
 		{hours = timeCount/3600;                                   //calculate hours
 		mins = (
 				timeCount%3600)/60;                                 //calculate minutes
 		seconds = timeCount%60;                                      //calculate seconds
 		timer.setText( hours + ":" + mins + ":"+ seconds + "");   //display  hours:minutes:seconds
+		} 
+		return timeCount;
+	}
+	
+	public String sqlTimer(int timeCount){
+		if (timeCount<60){
+			String t1 = String.valueOf(timeCount);
+			sqltime = "0:00:"+t1;}
+		else if(timeCount> 59 && timeCount < 3600){
+			int mt=timeCount/60;
+			String m = String.valueOf(mt);
+			int st = timeCount%60;
+			String s = String.valueOf(st);
+			sqltime = "0:" + m + ":" +s;}
+		else if(timeCount>3599){
+			int h = timeCount/3600;
+			String hs = String.valueOf(h);
+			int min = (timeCount-(3600*h))%60;
+			String ms = String.valueOf(min);
+			int sec =(timeCount-(3600*h))%3600;
+			String ss = String.valueOf(sec);
+			sqltime = hs + ":" + ms+ ":" + ss ;
 		}
+			
+		return sqltime;
 	}
 
 	private void addHeight() {//method to calculate accumulated altitude
 		if(height - lastHeight  < 2  &&  height > lastHeight )//if height difference is less than 2 m . this is to avoid a large initial value where the lastHeight 
 		{ heightDiff =     (float) (height - lastHeight  )  ;// has a zero initial value causing heightDiff to be equal to the initial altitude. It also has the effect 
-			countHeight = countHeight + heightDiff;          //of smoothing out altitude spikes. && checks thaet new height is higher than last height
+			countHeight = countHeight + heightDiff;          //of smoothing out altitude spikes. && checks that new height is higher than last height
 			tvAscent.setText((int) countHeight + " m");//  countHeight is cast to an int to eliminate figures to right of decimal point
+		//	heit =String.format( "%.1f", countHeight);
 			}
 		lastHeight =  (float) height;
 	}
 
 
 
-/*	public void showHeight() {   //method to display current height
-		tvAlt.setText(height + " m");
-	}*/
-
-	private void showMaxSp() {//method to get maximum speed. current speed is set to max speed if it is greater than current max speed
+    private String showMaxSp() {//method to get maximum speed. current speed is set to max speed if it is greater than current max speed
 		if(currentSpeedKm > maxsp)
 		{maxsp = currentSpeedKm;}
-  	String mx = String.format( "%.1f", maxsp);
+         mx	 = String.format( "%.1f", maxsp);
 		tvMaxSp.setText(mx + " Km/h");
-	
+		 sqlmax = mx + "kph";
+	return sqlmax;
 	}
 
 	public void showSpeedKm() {
@@ -278,6 +338,14 @@ public class GPS_MAP extends Activity implements LocationListener {
 		   //show speed in kilometres per hour to one place of decimals
 		 speed = String.format("%.1f", currentSpeedKm);//from http://stackoverflow.com/questions/11072340/i-need-to-round-a-float-to-two-decimal-places-in-java
 		txtvukm.setText(speed + " Km/h");
+		
+	}
+
+	public float getCals(int dist, float countHeight) {
+		// method to calculate calories
+		calories = (dist*(25/1000)+ countHeight) ;
+	 //   calr = String.format("%.1f", calories);
+		return calories;
 		
 	}
 
@@ -304,7 +372,98 @@ public class GPS_MAP extends Activity implements LocationListener {
 		// TODO Auto-generated method stub
 		super.onPause();
 		wkLok.release();
+		stopUsingGPS();
 	}
-
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		onDestroy();
+	}
+	 
+    public void onClick(View v){
+    	switch(v.getId()){
+    	
+    	    case R.id.btnStart:
+    	    	onStart();
+    	    { Toast.makeText(getBaseContext(),
+        			"Start pressed", Toast.LENGTH_SHORT).show();}	
+    	    break;	
+    	    case R.id.btnPause:
+    	    	onPause();
+    	    { Toast.makeText(getBaseContext(),
+        			"pause pressed", Toast.LENGTH_SHORT).show();}
+    	    break;
+    	  
+    	    
+    	    case R.id.btnStop:
+    	   
+    	    	onStop();
+    	 /*  	getCals( dist,  countHeight);
+    	    	timerCount();
+    	    	addHeight();
+    	    	int heightshow = (int) countHeight;
+    	    	getDistance();
+    	 	distint =(int) (dist/1000);
+    	    	showMaxSp();
+    	    	getAv();*/
+    	    	sqlDistance(dist);
+    	    	sqlTimer( timeCount);
+    	    	showMaxSp();
+    	    	
+    	    	 { Toast.makeText(getBaseContext(),
+    	        		"stop pressed", Toast.LENGTH_SHORT).show();}  	
+    	    	
+    		    boolean testOk = true;
+    			try{
+    			String avspeed = "avs";
+    			String time = sqltime;
+    			String mclimb = "heit";
+    			String cal = "calr";
+    			String dist =sqldist;
+    			String max = sqlmax;
+    			
+    			HistoryHandler entry = new HistoryHandler(GPS_MAP.this);
+    			entry.open();
+    			entry.createEntry( avspeed, time, mclimb, cal, dist, max);
+    			entry.close();
+    			
+    		    }catch (Exception e){
+    		    	    testOk = false;
+    		    	    String error = e.toString();
+    		    	    Dialog d = new Dialog(this);
+    		    		d.setTitle("Problem");
+    		    		TextView tv = new TextView(this);
+    		    		tv.setText(error);
+    		    		d.setContentView(tv);
+    		    		d.show();
+    		    }finally{
+    		    	if(testOk){
+    		    		Dialog d = new Dialog(this);
+    		    		d.setTitle("WorksOk");
+    		    		TextView tv = new TextView(this);
+    		    		tv.setText("works");
+    		    		d.setContentView(tv);
+    		    		d.show();
+    		    		
+    		    		
+    		    	}
+    		    }
+   	    	
+    	    	
+    	//  { Toast.makeText(getBaseContext(),
+      //	"Av="+ avs +	"calories="+ calories + "distance=" + dist , Toast.LENGTH_LONG).show();}
+    	  //  { Toast.makeText(getBaseContext(),
+    	  //      "time="+ timeCount+	"calories="+ calories + "height" + heightshow , Toast.LENGTH_LONG).show();}
+    	    break;	
+    	    
+    	
+    	}
+    }
+    public void stopUsingGPS(){//http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
+        if(locMgr != null){
+        	locMgr.removeUpdates(this);
+        }       
+    }
+	
 }
 
